@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      discovery:
+        prefer-ip-address: true
+        instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+      host: 127.0.0.1
+      port: 8500
+      config:
+        enabled: true
+        prefix: config
+        defaultContext: apps
+        watch:
+          enabled: true
+        fail-fast: false
+---
+spring:
+  profiles: docker
+  cloud:
+    consul:
+      host: consul
+      config:
+        fail-fast: true

@@ -1,0 +1,45 @@
+server:
+  compression:
+    enabled: true
+    mime-types: application/json
+  http2:
+    enabled: true
+
+spring:
+  application:
+    name: tw-api
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+    mapper:
+      propagate_transient_marker: true
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  flyway:
+    enabled: true
+    schemas: resilience
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
+    endpoint:
+      shutdown:
+        enabled: true
+      health:
+        show-details: ALWAYS
+
+jdbc:
+  url: jdbc:postgresql://localhost:5432/postgres
+  username: resilience
+  password: resilience
+  schema: resilience
+
+## Debugging
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: debug

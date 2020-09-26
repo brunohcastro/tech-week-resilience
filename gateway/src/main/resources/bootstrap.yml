@@ -1,0 +1,35 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: tw-gateway
+  cloud:
+    consul:
+      discovery:
+        prefer-ip-address: true
+      host: 127.0.0.1
+      port: 8500
+zuul:
+  routes:
+    core-service:
+      path: /api/**
+      serviceId: tw-api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: ALWAYS
+
+---
+spring:
+  profiles: docker
+  cloud:
+    consul:
+      host: consul

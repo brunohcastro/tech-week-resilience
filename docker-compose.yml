@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  consul:
+    image: consul
+    container_name: tw-consul
+    ports:
+      - 8400:8400
+      - 8500:8500
+      - 8600:8600
+
+  postgres:
+    build:
+      context: ./resources/pgsql
+    container_name: tw-postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  api:
+    image: tw-resilience/api:latest
+    environment:
+      - DB_HOSTNAME=postgres
+    depends_on:
+      - postgres
+      - consul
+
+  gateway:
+    image: tw-resilience/gateway:latest
+    ports:
+      - 8182:8082
+    depends_on:
+      - postgres
+      - consul
